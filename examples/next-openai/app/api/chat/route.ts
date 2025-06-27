@@ -1,25 +1,23 @@
-import { openai } from '@ai-sdk/openai';
+import { createOpenAI } from '@ai-sdk/openai';  
 import { streamText } from 'ai';
 
-// Allow streaming responses up to 30 seconds
+const openrouter = createOpenAI({  // Added this block
+  apiKey: process.env.OPENROUTER_API_KEY,
+  baseURL: 'https://openrouter.ai/api/v1',
+});
+
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  // Extract the `messages` from the body of the request
   const { messages, id } = await req.json();
-
-  console.log('chat id', id); // can be used for persisting the chat
-
-  // Call the language model
+  console.log('chat id', id);
+  
   const result = streamText({
-    model: openai('gpt-4o'),
-    messages,
+    model: openrouter('openai/gpt-4o'),  // switched to openrouter
     async onFinish({ text, toolCalls, toolResults, usage, finishReason }) {
-      // implement your own logic here, e.g. for storing messages
-      // or recording token usage
+      // implement your own logic here
     },
   });
-
-  // Respond with the stream
+  
   return result.toDataStreamResponse();
 }
