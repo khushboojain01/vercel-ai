@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   console.log('chat id', id);
   
   const result = streamText({
-    model: openrouter('openai/gpt-4o'),  // switched to openrouter
+    model: openrouter('openai/gpt-3.5-turbo'), // More reliable free option'),
     async onFinish({ text, toolCalls, toolResults, usage, finishReason }) {
       // implement your own logic here
     },
